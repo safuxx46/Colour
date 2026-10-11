@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111111">
+<title>Boostly — SMM Services Store (demo)</title>
+<style>
+:root{
+  --kimi-font-sans:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --kimi-font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --t-fast:120ms; --t-normal:200ms; --ease-out:cubic-bezier(.2,.8,.2,1);
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --kimi-color-text-primary:#1a1a1a; --kimi-color-text-secondary:#555; --kimi-color-text-tertiary:#888; --kimi-color-text-quaternary:#bbb;
+    --kimi-color-surface:#fff; --kimi-color-surface-muted:#f3f3f3; --kimi-color-surface-raised:#fff; --kimi-color-surface-strong:#eaeaea;
+    --kimi-color-border:#e2e2e2;
+    --kimi-color-danger:#d92d20; --kimi-color-positive:#12915c; --kimi-color-warning:#b54708;
+    --kimi-color-accent:#2e6be6;
+    --kimi-chart-1:#2e6be6; --kimi-chart-2:#d64550; --kimi-chart-3:#12915c; --kimi-chart-4:#7a5af8; --kimi-chart-5:#8a8a8a;
+  }
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --kimi-color-text-primary:#f2f2f2; --kimi-color-text-secondary:#c4c4c4; --kimi-color-text-tertiary:#8f8f8f; --kimi-color-text-quaternary:#5c5c5c;
+    --kimi-color-surface:#1c1c1e; --kimi-color-surface-muted:#2a2a2c; --kimi-color-surface-raised:#242426; --kimi-color-surface-strong:#333336;
+    --kimi-color-border:#3a3a3d;
+    --kimi-color-danger:#f97066; --kimi-color-positive:#32c48d; --kimi-color-warning:#fdb022;
+    --kimi-color-accent:#5b8def;
+    --kimi-chart-1:#5b8def; --kimi-chart-2:#e46973; --kimi-chart-3:#32c48d; --kimi-chart-4:#9b8af8; --kimi-chart-5:#9a9a9a;
+  }
+}
+body{margin:0;padding:24px 16px;font-family:var(--kimi-font-sans);background:var(--kimi-color-surface);color:var(--kimi-color-text-primary)}
+</style>
+</head>
+<body>
+<div id="app" style="font-family:var(--kimi-font-sans);max-width:860px;margin:0 auto;color:var(--kimi-color-text-primary)">
+<style>
+#app button,#app input,#app select{font:inherit;color:inherit}
+#app .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+#app .btn{border:1px solid var(--kimi-color-border);background:transparent;border-radius:8px;padding:8px 16px;cursor:pointer;font-size:14px;font-weight:500;transition:background var(--t-fast) var(--ease-out)}
+#app .btn:hover{background:var(--kimi-color-surface-muted)}
+#app .btn-primary{background:var(--kimi-color-text-primary);color:var(--kimi-color-surface);border-color:var(--kimi-color-text-primary)}
+#app .btn-primary:hover{opacity:.88;background:var(--kimi-color-text-primary)}
+#app .card{border:1px solid var(--kimi-color-border);border-radius:10px;padding:16px;transition:background var(--t-fast) var(--ease-out),border-color var(--t-fast) var(--ease-out)}
+#app .card:hover{background:var(--kimi-color-surface-muted)}
+#app .chip{display:inline-flex;align-items:center;gap:6px;border-radius:6px;padding:3px 10px;font-size:12px;font-weight:500}
+#app .iconbtn{border:1px solid var(--kimi-color-border);background:transparent;border-radius:8px;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+#app .iconbtn:hover{background:var(--kimi-color-surface-muted)}
+#app input[type=text],#app input[type=email]{border:1px solid var(--kimi-color-border);border-radius:10px;padding:10px 12px;font-size:14px;background:transparent;width:100%;box-sizing:border-box}
+#app input:focus{outline:2px solid var(--kimi-color-text-primary);outline-offset:-1px}
+#app .view{display:none}
+#app .view.active{display:block;animation:fadein var(--t-normal) var(--ease-out)}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+#app .rowact{opacity:0;transition:opacity var(--t-fast) var(--ease-out)}
+#app .rowhover:hover .rowact,#app .rowhover:focus-within .rowact{opacity:1}
+#app .tierrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--kimi-color-border);border-radius:8px}
+#app .stepper{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--kimi-color-border);border-radius:8px;padding:2px}
+</style>
+
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--kimi-color-border)">
+  <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="go('home')">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M10.1789 6.60059C11.7256 6.18648 13.3159 7.1048 13.7306 8.65137L15.2834 14.4473C15.6979 15.9943 14.7795 17.5844 13.2326 17.999L7.43668 19.5527C5.8898 19.9669 4.29941 19.0478 3.88492 17.501L2.33219 11.7061C1.91782 10.1591 2.836 8.56783 4.38297 8.15332L10.1789 6.60059Z" fill="currentColor"/></svg>
+    <span style="font-size:17px;font-weight:500">Boostly</span>
+    <span class="chip" style="background:color-mix(in srgb,var(--kimi-color-warning) 15%,transparent);color:var(--kimi-color-warning)">demo store</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <button class="btn" onclick="go('home')">Services</button>
+    <button class="iconbtn" onclick="go('cart')" aria-label="cart" style="position:relative">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M11.9997 12.8779C16.0197 12.878 19.4393 15.3848 20.7048 18.8828C21.0812 19.9234 20.2782 20.8962 19.2038 21.0137L18.9861 21.0264H5.0134L4.79562 21.0137C3.7213 20.8961 2.91743 19.9233 3.29367 18.8828C4.55905 15.3847 7.9797 12.8781 11.9997 12.8779ZM11.9997 3C14.4853 3 16.5 5.01472 16.5 7.5C16.5 9.98528 14.4853 12 11.9997 12C9.51414 12 7.5 9.98528 7.5 7.5C7.5 5.01472 9.51414 3 11.9997 3Z" fill="currentColor"/></svg>
+      <span id="cartcount" style="position:absolute;top:-6px;right:-6px;min-width:16px;height:16px;border-radius:8px;background:var(--kimi-color-text-primary);color:var(--kimi-color-surface);font-size:11px;display:none;align-items:center;justify-content:center;padding:0 4px" class="num">0</span>
+    </button>
+  </div>
+</div>
+
+<div id="view-home" class="view active" style="padding-top:20px">
+  <div style="font-size:20px;font-weight:500">Social media growth services</div>
+  <div style="color:var(--kimi-color-text-secondary);font-size:14px;padding-top:4px;padding-bottom:20px">Pick a platform to see packages and pricing.</div>
+  <div id="platformgrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px"></div>
+</div>
+
+<div id="view-platform" class="view" style="padding-top:20px">
+  <button class="btn" onclick="go('home')" style="display:inline-flex;align-items:center;gap:6px;margin-bottom:16px">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 5L8 12L15 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    All platforms
+  </button>
+  <div id="platformhead" style="display:flex;align-items:center;gap:12px;padding-bottom:16px"></div>
+  <div id="services" style="display:flex;flex-direction:column;gap:16px"></div>
+</div>
+
+<div id="view-cart" class="view" style="padding-top:20px">
+  <div style="font-size:20px;font-weight:500;padding-bottom:16px">Your cart</div>
+  <div id="cartbody"></div>
+</div>
+
+<div id="view-checkout" class="view" style="padding-top:20px;max-width:480px">
+  <div style="font-size:20px;font-weight:500;padding-bottom:16px">Checkout</div>
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <label style="font-size:14px;font-weight:500">Profile or post link
+      <input type="text" id="f-link" placeholder="https://instagram.com/yourname" style="margin-top:6px">
+    </label>
+    <label style="font-size:14px;font-weight:500">Email for delivery updates
+      <input type="email" id="f-email" placeholder="you@example.com" style="margin-top:6px">
+    </label>
+    <div id="checkout-summary" style="border:1px solid var(--kimi-color-border);border-radius:10px;padding:12px 16px;font-size:14px"></div>
+    <div id="checkout-err" style="color:var(--kimi-color-danger);font-size:13px;display:none">Please fill in a valid link and email.</div>
+    <button class="btn btn-primary" onclick="placeOrder()" style="padding:12px">Place order · <span id="checkout-total" class="num"></span></button>
+    <div style="color:var(--kimi-color-text-tertiary);font-size:12px">Demo checkout — no payment is processed and no real orders are placed.</div>
+  </div>
+</div>
+
+<div id="view-success" class="view" style="padding-top:32px;text-align:center;max-width:480px;margin:0 auto">
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" style="color:var(--kimi-color-positive)"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M8 12.5L10.8 15.2L16 9.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+  <div style="font-size:20px;font-weight:500;padding-top:12px">Order placed</div>
+  <div style="color:var(--kimi-color-text-secondary);font-size:14px;padding-top:4px">Order <span id="orderid" class="num" style="font-weight:500;color:var(--kimi-color-text-primary)"></span> · <span id="ordertotal" class="num"></span></div>
+  <div style="color:var(--kimi-color-text-tertiary);font-size:13px;padding-top:8px">In a live store this is where payment and order tracking would begin.</div>
+  <button class="btn" onclick="go('home')" style="margin-top:20px">Back to services</button>
+</div>
+
+<script>
+const fmt=n=>'₹'+n.toLocaleString('en-IN');
+const ICONS={
+ profile:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M11.9997 12.8779C16.0197 12.878 19.4393 15.3848 20.7048 18.8828C21.0812 19.9234 20.2782 20.8962 19.2038 21.0137L18.9861 21.0264H5.0134L4.79562 21.0137C3.7213 20.8961 2.91743 19.9233 3.29367 18.8828C4.55905 15.3847 7.9797 12.8781 11.9997 12.8779ZM11.9997 3C14.4853 3 16.5 5.01472 16.5 7.5C16.5 9.98528 14.4853 12 11.9997 12C9.51414 12 7.5 9.98528 7.5 7.5C7.5 5.01472 9.51414 3 11.9997 3Z" fill="currentColor"/></svg>',
+ like:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M11.8008 2.20386C12.9196 2.20697 14.0714 2.95768 14.6924 4.17847C15.3083 5.25838 15.3183 6.6302 15.0029 8.06226H18.0244C20.3536 8.06238 22.3556 10.0885 21.6377 12.4167L19.7588 18.5105C19.286 20.0439 17.7636 21.0064 16.1455 21.0066H8.86621C7.29432 21.0066 6.01953 19.7318 6.01953 18.1599V9.61792C6.01953 8.75706 6.59143 8.12094 7.18652 7.81421C7.74138 7.52813 8.27631 7.03526 8.55762 6.28882C8.7423 5.79875 8.81718 5.36749 8.89551 4.91284C9.01218 4.24725 9.13189 3.60409 9.57715 3.073C9.98574 2.58579 10.4533 2.34616 10.9248 2.25269C11.2492 2.18839 11.6072 2.19827 11.8008 2.20386Z" fill="currentColor"/></svg>',
+ play:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7.76253 3.10547C8.25778 3.10552 8.74424 3.23849 9.17073 3.49023L19.533 9.60742C20.8536 10.3869 21.2923 12.0901 20.5174 13.4121C20.2785 13.8195 19.9398 14.1604 19.533 14.4004L9.16975 20.5156C7.84722 21.2958 6.14596 20.8511 5.36995 19.5273C5.11962 19.1003 4.9872 18.6142 4.98714 18.1191V5.88672C4.98717 4.3537 6.22731 3.10547 7.76253 3.10547Z" fill="currentColor"/></svg>',
+ comment:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M11.9004 2.19995C17.3678 2.20016 21.7998 6.63285 21.7998 12.1003C21.7996 17.5677 17.3677 21.9995 11.9004 21.9998H3.80078C2.72946 21.9996 2.00334 20.9089 2.41699 19.9207L3.49805 17.3386C2.54871 15.8189 2.00007 14.0226 2 12.1003C2 6.63272 6.43277 2.19995 11.9004 2.19995Z" fill="currentColor"/></svg>',
+ share:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13.5 4.5L20.5 10L13.5 15.5V12C8 12 5 14 3.5 18C3 13.5 5.5 8.5 13.5 8V4.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/></svg>',
+ music:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18.627 3.35611C19.8025 3.12106 20.9001 4.02068 20.9004 5.21939V15.9997C20.9004 17.6013 19.6016 18.9001 18 18.9001C16.3984 18.9001 15.0996 17.6013 15.0996 15.9997C15.0998 14.3982 16.3985 13.0993 18 13.0993V9.21939L12.6768 10.3825C12.1894 10.4799 11.7148 10.1637 11.6172 9.67642C11.52 9.18922 11.8361 8.71439 12.3232 8.61685L18.627 7.35611ZM8.90039 12.9997V17.9997C8.90039 19.6013 7.60163 20.9001 6 20.9001C4.39837 20.9001 3.09961 19.6013 3.09961 17.9997C3.09984 16.3982 4.39852 15.0993 6 15.0993C6.38939 15.0993 6.76033 15.1778 7.09961 15.317V12.9997H8.90039Z" fill="currentColor"/></svg>',
+ group:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10.1789 6.60059C11.7256 6.18648 13.3159 7.1048 13.7306 8.65137L15.2834 14.4473C15.6979 15.9943 14.7795 17.5844 13.2326 17.999L7.43668 19.5527C5.8898 19.9669 4.29941 19.0478 3.88492 17.501L2.33219 11.7061C1.91782 10.1591 2.836 8.56783 4.38297 8.15332L10.1789 6.60059Z" fill="currentColor"/></svg>'
+};
+const PLATFORMS={
+ instagram:{name:'Instagram',color:'var(--kimi-chart-4)',icon:'profile',services:[
+  {n:'Followers',icon:'profile',desc:'High-quality profiles, gradual delivery',tiers:[['1,000',150],['2,000',290],['5,000',700],['10,000',1300]]},
+  {n:'Likes',icon:'like',desc:'Realistic like velocity per post',tiers:[['1,000',60],['5,000',280],['10,000',520]]},
+  {n:'Views',icon:'play',desc:'Reels and video views',tiers:[['10,000',90],['50,000',400],['100,000',750]]},
+  {n:'Comments',icon:'comment',desc:'Custom comments available on request',tiers:[['100',450],['500',2000]]}
+ ]},
+ tiktok:{name:'TikTok',color:'var(--kimi-chart-1)',icon:'music',services:[
+  {n:'Followers',icon:'profile',desc:'Global followers, drip-feed over days',tiers:[['1,000',220],['5,000',1000],['10,000',1900]]},
+  {n:'Likes',icon:'like',desc:'Fast-start likes for the algorithm',tiers:[['1,000',70],['10,000',620]]},
+  {n:'Views',icon:'play',desc:'Full video plays, non-drop',tiers:[['10,000',60],['100,000',520],['1,000,000',4500]]}
+ ]},
+ youtube:{name:'YouTube',color:'var(--kimi-chart-2)',icon:'play',services:[
+  {n:'Subscribers',icon:'group',desc:'Channel subscribers, 30-day refill',tiers:[['1,000',1200],['5,000',5600]]},
+  {n:'Views',icon:'play',desc:'Monetizable watch-page views',tiers:[['5,000',350],['50,000',3000]]},
+  {n:'Likes',icon:'like',desc:'Video likes with natural spread',tiers:[['1,000',450],['5,000',2100]]},
+  {n:'Watch hours',icon:'play',desc:'Towards the 4,000-hour monetization goal',tiers:[['1,000 hours',2800],['4,000 hours',10000]]}
+ ]},
+ x:{name:'X (Twitter)',color:'var(--kimi-color-text-primary)',icon:'comment',services:[
+  {n:'Followers',icon:'profile',desc:'Profile followers, stable',tiers:[['1,000',260],['5,000',1150],['10,000',2100]]},
+  {n:'Likes',icon:'like',desc:'Post likes',tiers:[['1,000',90],['5,000',400]]},
+  {n:'Reposts',icon:'share',desc:'Amplify reach',tiers:[['500',350],['2,000',1200]]}
+ ]},
+ facebook:{name:'Facebook',color:'var(--kimi-chart-1)',icon:'group',services:[
+  {n:'Page likes',icon:'like',desc:'Page and profile likes',tiers:[['1,000',400],['5,000',1800]]},
+  {n:'Followers',icon:'profile',desc:'Profile and page followers',tiers:[['1,000',380],['10,000',3400]]},
+  {n:'Post likes',icon:'like',desc:'Engagement on posts',tiers:[['1,000',120],['5,000',550]]}
+ ]},
+ spotify:{name:'Spotify',color:'var(--kimi-chart-3)',icon:'music',services:[
+  {n:'Monthly listeners',icon:'group',desc:'Boost listener counts',tiers:[['1,000',500],['10,000',4500]]},
+  {n:'Plays',icon:'play',desc:'Track plays, safe speed',tiers:[['5,000',220],['50,000',2000]]},
+  {n:'Followers',icon:'profile',desc:'Artist and playlist followers',tiers:[['1,000',600],['5,000',2800]]}
+ ]}
+};
+const cart=[];
+function go(view){
+ document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+ document.getElementById('view-'+view).classList.add('active');
+ if(view==='home')renderHome();
+ if(view==='cart')renderCart();
+ if(view==='checkout')renderCheckout();
+ window.scrollTo(0,0);
+}
+function renderHome(){
+ const g=document.getElementById('platformgrid');
+ const from=p=>fmt(Math.min(...p.services.flatMap(s=>s.tiers.map(t=>t[1]))));
+ g.innerHTML=Object.entries(PLATFORMS).map(([key,p])=>`
+  <div class="card rowhover" style="cursor:pointer;display:flex;align-items:center;gap:12px" onclick="openPlatform('${key}')">
+    <span style="width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,${p.color} 12%,transparent);color:${p.color}">${ICONS[p.icon]}</span>
+    <span style="flex:1">
+      <div style="font-weight:500;font-size:15px">${p.name}</div>
+      <div style="font-size:13px;color:var(--kimi-color-text-secondary)">${p.services.length} services · from <span class="num">${from(p)}</span></div>
+    </span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--kimi-color-text-tertiary)"><path d="M9 5L16 12L9 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>`).join('');
+}
+function openPlatform(key){
+ const p=PLATFORMS[key];
+ document.getElementById('platformhead').innerHTML=`
+  <span style="width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,${p.color} 12%,transparent);color:${p.color}">${ICONS[p.icon]}</span>
+  <span><div style="font-size:20px;font-weight:500">${p.name}</div>
+  <div style="font-size:13px;color:var(--kimi-color-text-secondary)">${p.services.length} services</div></span>`;
+ document.getElementById('services').innerHTML=p.services.map((s,si)=>`
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:8px;padding-bottom:4px">
+      <span style="color:var(--kimi-color-text-secondary)">${ICONS[s.icon]}</span>
+      <span style="font-weight:500;font-size:15px">${s.n}</span>
+    </div>
+    <div style="font-size:13px;color:var(--kimi-color-text-secondary);padding-bottom:12px">${s.desc}</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px">
+      ${s.tiers.map((t,ti)=>`
+      <div class="tierrow">
+        <span class="num" style="font-weight:500;font-size:14px">${t[0]}</span>
+        <span style="display:flex;align-items:center;gap:10px">
+          <span class="num" style="font-size:14px;color:var(--kimi-color-text-secondary)">${fmt(t[1])}</span>
+          <button class="iconbtn" style="width:28px;height:28px" onclick="addToCart('${key}',${si},${ti})" aria-label="add"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 6.09961C12.4971 6.09961 12.9004 6.50294 12.9004 7V11.0996H17C17.4971 11.0996 17.9004 11.5029 17.9004 12C17.9004 12.4971 17.4971 12.9004 17 12.9004H12.9004V17C12.9004 17.4971 12.4971 17.9004 12 17.9004C11.5029 17.9004 11.0996 17.4971 11.0996 17V12.9004H7C6.50294 12.9004 6.09961 12.4971 6.09961 12C6.09961 11.5029 6.50294 11.0996 7 11.0996H11.0996V7C11.0996 6.50294 11.5029 6.09961 12 6.09961Z" fill="currentColor"/></svg></button>
+        </span>
+      </div>`).join('')}
+    </div>
+  </div>`).join('');
+ go('platform');
+}
+function addToCart(pk,si,ti){
+ const found=cart.find(c=>c.pk===pk&&c.si===si&&c.ti===ti);
+ if(found)found.qty++;else cart.push({pk,si,ti,qty:1});
+ updateBadge();
+}
+function itemLabel(c){
+ const s=PLATFORMS[c.pk].services[c.si];
+ return {plat:PLATFORMS[c.pk].name,svc:s.n,qty:s.tiers[c.ti][0],price:s.tiers[c.ti][1]};
+}
+function cartTotal(){return cart.reduce((a,c)=>a+itemLabel(c).price*c.qty,0)}
+function updateBadge(){
+ const n=cart.reduce((a,c)=>a+c.qty,0);
+ const b=document.getElementById('cartcount');
+ b.style.display=n?'flex':'none';b.textContent=n;
+}
+function renderCart(){
+ const body=document.getElementById('cartbody');
+ if(!cart.length){
+  body.innerHTML=`<div style="text-align:center;padding:32px 0;color:var(--kimi-color-text-secondary)">
+   <div style="font-size:15px;font-weight:500;color:var(--kimi-color-text-primary)">Your cart is empty</div>
+   <div style="font-size:13px;padding-top:4px">Add a package from any platform.</div>
+   <button class="btn btn-primary" onclick="go('home')" style="margin-top:16px">Browse services</button></div>`;
+  return;
+ }
+ body.innerHTML=cart.map((c,i)=>{const l=itemLabel(c);return `
+  <div class="rowhover" style="display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--kimi-color-border)">
+    <span style="flex:1">
+      <div style="font-size:14px;font-weight:500">${l.plat} · ${l.svc}</div>
+      <div style="font-size:13px;color:var(--kimi-color-text-secondary)" class="num">${l.qty} × ${fmt(l.price)}</div>
+    </span>
+    <span class="stepper">
+      <button class="iconbtn" style="width:24px;height:24px;border:none" onclick="chQty(${i},-1)" aria-label="decrease"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M17 11.0996C17.4971 11.0996 17.9004 11.5029 17.9004 12C17.9004 12.4971 17.4971 12.9004 17 12.9004H7C6.50294 12.9004 6.09961 12.4971 6.09961 12C6.09961 11.5029 6.50294 11.0996 7 11.0996H17Z" fill="currentColor"/></svg></button>
+      <span class="num" style="min-width:20px;text-align:center;font-size:14px">${c.qty}</span>
+      <button class="iconbtn" style="width:24px;height:24px;border:none" onclick="chQty(${i},1)" aria-label="increase"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 6.09961C12.4971 6.09961 12.9004 6.50294 12.9004 7V11.0996H17C17.4971 11.0996 17.9004 11.5029 17.9004 12C17.9004 12.4971 17.4971 12.9004 17 12.9004H12.9004V17C12.9004 17.4971 12.4971 17.9004 12 17.9004C11.5029 17.9004 11.0996 17.4971 11.0996 17V12.9004H7C6.50294 12.9004 6.09961 12.4971 6.09961 12C6.09961 11.5029 6.50294 11.0996 7 11.0996H11.0996V7C11.0996 6.50294 11.5029 6.09961 12 6.09961Z" fill="currentColor"/></svg></button>
+    </span>
+    <span class="num" style="font-weight:500;font-size:14px;min-width:72px;text-align:right">${fmt(l.price*c.qty)}</span>
+    <button class="iconbtn rowact" style="width:28px;height:28px;color:var(--kimi-color-danger)" onclick="rm(${i})" aria-label="remove"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+  </div>`}).join('')+
+ `<div style="display:flex;align-items:center;justify-content:space-between;padding-top:16px">
+   <span style="font-size:15px;font-weight:500">Total</span>
+   <span class="num" style="font-size:20px;font-weight:500">${fmt(cartTotal())}</span>
+  </div>
+  <button class="btn btn-primary" onclick="go('checkout')" style="width:100%;margin-top:16px;padding:12px">Proceed to checkout</button>`;
+}
+function chQty(i,d){cart[i].qty+=d;if(cart[i].qty<1)cart.splice(i,1);updateBadge();renderCart()}
+function rm(i){cart.splice(i,1);updateBadge();renderCart()}
+function renderCheckout(){
+ document.getElementById('checkout-summary').innerHTML=
+  cart.map(c=>{const l=itemLabel(c);return `<div style="display:flex;justify-content:space-between;padding:2px 0"><span>${l.plat} · ${l.svc} <span style="color:var(--kimi-color-text-tertiary)">×${c.qty}</span></span><span class="num">${fmt(l.price*c.qty)}</span></div>`}).join('')+
+  `<div style="display:flex;justify-content:space-between;font-weight:500;border-top:1px solid var(--kimi-color-border);margin-top:8px;padding-top:8px"><span>Total</span><span class="num">${fmt(cartTotal())}</span></div>`;
+ document.getElementById('checkout-total').textContent=fmt(cartTotal());
+}
+function placeOrder(){
+ const link=document.getElementById('f-link').value.trim();
+ const email=document.getElementById('f-email').value.trim();
+ const ok=link.length>3&&/^\S+@\S+\.\S+$/.test(email);
+ document.getElementById('checkout-err').style.display=ok?'none':'block';
+ if(!ok)return;
+ document.getElementById('orderid').textContent='#B-'+Math.floor(100000+Math.random()*900000);
+ document.getElementById('ordertotal').textContent=fmt(cartTotal());
+ cart.length=0;updateBadge();
+ go('success');
+}
+renderHome();
+</script>
+</div>
+</body>
+</html>
